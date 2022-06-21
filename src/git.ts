@@ -10,8 +10,16 @@ export async function getCurrentGitBranch() {
   return await execCommand('git', ['tag', '--points-at', 'HEAD']) || await execCommand('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
 }
 
+export async function getCommitTime(id: string) {
+  return execCommand('git', ['log', '--format=%ct', id]).then(r => r.split('\n')[0]);
+}
+
+export async function getGitTags() {
+  return execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n'));
+}
+
 export async function getLastGitTag(delta = 0) {
-  const tags = await execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n'))
+  const tags = await getGitTags();
   return tags[tags.length + delta - 1]
 }
 
