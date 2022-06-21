@@ -22,6 +22,10 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
    */
   dry?: boolean
   /**
+   * Where to write the changelog.
+   */
+  outfile?: string;
+  /**
    * Whether to include contributors in release notes.
    *
    * @default true

@@ -3,6 +3,7 @@ import { blue, bold, cyan, dim, red, yellow } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
 import { generate, hasTagOnGitHub, sendRelease } from './index'
+import { writeChangelog } from './write';
 
 const cli = cac('changelogithub')
 
@@ -18,6 +19,7 @@ cli
   .option('-d, --draft', 'Mark release as draft')
   .option('--capitalize', 'Should capitalize for each comment message')
   .option('--dry', 'Dry run')
+  .option('-o, --outfile <path>', 'Write the changelog to this file')
   .help()
 
 cli
@@ -31,17 +33,22 @@ cli
 
       const { config, md, commits } = await generate(args as any)
 
+      const rawMD = md.replaceAll('&nbsp;', '');
       console.log(bold(config.github))
       console.log(cyan(config.from) + dim(' -> ') + blue(config.to) + dim(` (${commits.length} commits)`))
       console.log(dim('--------------'))
       console.log()
-      console.log(md.replaceAll('&nbsp;', ''))
+      console.log(rawMD)
       console.log()
       console.log(dim('--------------'))
 
       if (config.dry) {
         console.log(yellow('Dry run. Release skipped.'))
         return
+      }
+
+      if (config.outfile) {
+        await writeChangelog(config, md);
       }
 
       if (!config.token) {
