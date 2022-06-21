@@ -11,15 +11,15 @@ export async function getCurrentGitBranch() {
 }
 
 export async function getCommitTime(id: string) {
-  return execCommand('git', ['log', '--format=%ct', id]).then(r => r.split('\n')[0]);
+  return execCommand('git', ['log', '--format=%ct', id]).then(r => r.split('\n')[0])
 }
 
 export async function getGitTags() {
-  return execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n'));
+  return execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n'))
 }
 
 export async function getLastGitTag(delta = 0) {
-  const tags = await getGitTags();
+  const tags = await getGitTags()
   return tags[tags.length + delta - 1]
 }
 

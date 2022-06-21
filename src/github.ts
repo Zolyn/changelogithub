@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { $fetch } from 'ohmyfetch'
 import { cyan, green } from 'kolorist'
 import type { GitCommit } from 'changelogen'

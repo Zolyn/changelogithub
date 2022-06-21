@@ -2,8 +2,8 @@
 import { blue, bold, cyan, dim, red, yellow } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
+import { writeChangelog } from './write'
 import { generate, hasTagOnGitHub, sendRelease } from './index'
-import { writeChangelog } from './write';
 
 const cli = cac('changelogithub')
 
@@ -33,7 +33,7 @@ cli
 
       const { config, md, commits } = await generate(args as any)
 
-      const rawMD = md.replaceAll('&nbsp;', '');
+      const rawMD = md.replaceAll('&nbsp;', '')
       console.log(bold(config.github))
       console.log(cyan(config.from) + dim(' -> ') + blue(config.to) + dim(` (${commits.length} commits)`))
       console.log(dim('--------------'))
@@ -47,9 +47,8 @@ cli
         return
       }
 
-      if (config.outfile) {
-        await writeChangelog(config, md);
-      }
+      if (config.outfile)
+        await writeChangelog(config, md)
 
       if (!config.token) {
         console.log(red('No GitHub token found, specify it via GITHUB_TOKEN env. Release skipped.'))

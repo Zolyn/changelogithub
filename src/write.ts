@@ -1,118 +1,114 @@
-import semver from 'semver';
-import { yellow, bold, red } from 'kolorist';
-import { ResolvedChangelogOptions } from './types';
-import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants';
-import { stat, readFile, writeFile } from 'node:fs/promises';
-import { getCommitTime, getCurrentGitBranch, getFirstGitCommit, getGitTags } from './git';
-import { generate } from './generate';
+import { readFile, stat, writeFile } from 'node:fs/promises'
+import semver from 'semver'
+import { bold, red, yellow } from 'kolorist'
+import type { ResolvedChangelogOptions } from './types'
+import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
+import { getCommitTime, getCurrentGitBranch, getFirstGitCommit, getGitTags } from './git'
+import { generate } from './generate'
 
 export function formatTime(val: number): string {
-    return val < 10 ? '0' + val : val.toString();
+  return val < 10 ? `0${val}` : val.toString()
 }
 
 export async function genChangelog(config: ResolvedChangelogOptions, md: string) {
-    const currentVer = semver.valid(config.from) || INITIAL_VERSION_MARK;
-    const releaseVer = semver.valid(config.to) || NEXT_VERSION_MARK;
-    let heading = '##';
-    if (releaseVer !== NEXT_VERSION_MARK && !['patch', 'prepatch', 'prerelease'].includes(semver.diff(currentVer === INITIAL_VERSION_MARK ? 'v0.0.0' : currentVer, releaseVer)!)) {
-        heading = '#';
-    }
+  const currentVer = semver.valid(config.from) || INITIAL_VERSION_MARK
+  const releaseVer = semver.valid(config.to) || NEXT_VERSION_MARK
+  let heading = '##'
+  if (releaseVer !== NEXT_VERSION_MARK && !['patch', 'prepatch', 'prerelease'].includes(semver.diff(currentVer === INITIAL_VERSION_MARK ? 'v0.0.0' : currentVer, releaseVer)!))
+    heading = '#'
 
-    const compareLink = `[${releaseVer}](https://github.com/${config.github}/compare/${config.from}...${config.to})`;
+  const compareLink = `[${releaseVer}](https://github.com/${config.github}/compare/${config.from}...${config.to})`
 
-    const time = new Date(parseInt(await getCommitTime(config.to), 10) * 1000);
-    const year = time.getFullYear();
-    const month = time.getMonth() + 1;
-    const date = time.getDate();
+  const time = new Date(parseInt(await getCommitTime(config.to), 10) * 1000)
+  const year = time.getFullYear()
+  const month = time.getMonth() + 1
+  const date = time.getDate()
 
-    const releaseDate = `(${year}-${formatTime(month)}-${formatTime(date)})`;
+  const releaseDate = `(${year}-${formatTime(month)}-${formatTime(date)})`
 
-    const contentClip = md.split('\n');
-    contentClip.length = contentClip.length - 2;
-    contentClip.push('');
+  const contentClip = md.split('\n')
+  contentClip.length = contentClip.length - 2
+  contentClip.push('')
 
-    const result = [`${heading} ${compareLink} ${releaseDate}`, '', contentClip.join('\n')];
-    return { currentVer, releaseVer, result };
+  const result = [`${heading} ${compareLink} ${releaseDate}`, '', contentClip.join('\n')]
+  return { currentVer, releaseVer, result }
 }
 
 export async function writeChangelog(options: ResolvedChangelogOptions, content: string) {
-    let needCreateFile = false;
-    const fileStats = await stat(options.outfile).catch((err) => {
-        if (err.code !== 'ENOENT') {
-            console.log(red(err.toString()));
-            process.exitCode = 1;
-            return;
-        }
-
-        needCreateFile = true;
-    });
-
-    if (fileStats && !fileStats.isFile()) {
-      console.log(yellow(`${bold(options.outfile)} is not a file. Skipping.`));
-      process.exitCode = 1;
-      return;
+  let needCreateFile = false
+  const fileStats = await stat(options.outfile).catch((err) => {
+    if (err.code !== 'ENOENT') {
+      console.log(red(err.toString()))
+      process.exitCode = 1
+      return
     }
 
-    const lines: string[] = [];
+    needCreateFile = true
+  })
 
-    // Generate full changelog
-    if (needCreateFile) {
-        const tags = await getGitTags();
-        const currentBranch = await getCurrentGitBranch();
-        
-        if (tags[tags.length - 1] !== currentBranch) {
-            tags.push(currentBranch);
-        }
+  if (fileStats && !fileStats.isFile()) {
+    console.log(yellow(`${bold(options.outfile)} is not a file. Skipping.`))
+    process.exitCode = 1
+    return
+  }
 
-        for (let i = tags.length - 1;i >= 0;i -= 1) {
-            let from = tags[i - 1];
-            const to = tags[i];
+  const lines: string[] = []
 
-            if (i === tags.length - 1) {
-                lines.push('# Changelog', '');
-            }
+  // Generate full changelog
+  if (needCreateFile) {
+    const tags = await getGitTags()
+    const currentBranch = await getCurrentGitBranch()
 
-            if (i === 0) {
-                from = await getFirstGitCommit();
-            }
+    if (tags[tags.length - 1] !== currentBranch)
+      tags.push(currentBranch)
 
-            const { config, md } = await generate({
-                ...options,
-                from,
-                to,
-            });
-            
-            lines.push(...(await genChangelog(config, md.replaceAll('&nbsp;', ''))).result);
-        }
-    } else {
-        const { currentVer, releaseVer, result } = await genChangelog(options, content.replaceAll('&nbsp;', ''));
+    for (let i = tags.length - 1; i >= 0; i -= 1) {
+      let from = tags[i - 1]
+      const to = tags[i]
 
-        if (currentVer === INITIAL_VERSION_MARK) {
-            console.log(yellow(`The changelog file ${bold(options.outfile)} is incomplete (It may not be entirely generated by Changelogithub), it is recommended to delete the changelog file and regenerate a full changelog by using Changelogithub.`));
-            process.exitCode = 1;
-            return;
-        }
+      if (i === tags.length - 1)
+        lines.push('# Changelog', '')
 
-        lines.push(...result);
+      if (i === 0)
+        from = await getFirstGitCommit()
 
-        const resolvedChangelog = await readFile(options.outfile, 'utf-8');
-        const nextVersionClip = resolvedChangelog.split(`[${NEXT_VERSION_MARK}]`);
+      const { config, md } = await generate({
+        ...options,
+        from,
+        to,
+      })
 
-        let changelogClip: string[] = resolvedChangelog.split(`[${currentVer}]`);
+      lines.push(...(await genChangelog(config, md.replaceAll('&nbsp;', ''))).result)
+    }
+  }
+  else {
+    const { currentVer, releaseVer, result } = await genChangelog(options, content.replaceAll('&nbsp;', ''))
 
-        if (releaseVer === NEXT_VERSION_MARK && nextVersionClip.length > 1) {
-            changelogClip = nextVersionClip;
-        }
-
-        const changelogHeadClip = changelogClip[0].split('\n');
-        const currentVerHeading = changelogHeadClip[changelogHeadClip.length - 1];
-
-        changelogHeadClip[changelogHeadClip.length - 1] = lines.join('\n');
-        changelogHeadClip.push(currentVerHeading)
-        changelogClip[0] = changelogHeadClip.join('\n');
-
-        return writeFile(options.outfile, changelogClip.join(`[${currentVer}]`));
+    if (currentVer === INITIAL_VERSION_MARK) {
+      console.log(yellow(`The changelog file ${bold(options.outfile)} is incomplete (It may not be entirely generated by Changelogithub), it is recommended to delete the changelog file and regenerate a full changelog by using Changelogithub.`))
+      process.exitCode = 1
+      return
     }
 
-    return writeFile(options.outfile, lines.join('\n'));
+    lines.push(...result)
+
+    const resolvedChangelog = await readFile(options.outfile, 'utf-8')
+    const nextVersionClip = resolvedChangelog.split(`[${NEXT_VERSION_MARK}]`)
+
+    let changelogClip: string[] = resolvedChangelog.split(`[${currentVer}]`)
+
+    if (releaseVer === NEXT_VERSION_MARK && nextVersionClip.length > 1)
+      changelogClip = nextVersionClip
+
+    const changelogHeadClip = changelogClip[0].split('\n')
+    const currentVerHeading = changelogHeadClip[changelogHeadClip.length - 1]
+
+    changelogHeadClip[changelogHeadClip.length - 1] = lines.join('\n')
+    changelogHeadClip.push(currentVerHeading)
+    changelogClip[0] = changelogHeadClip.join('\n')
+
+    return writeFile(options.outfile, changelogClip.join(`[${currentVer}]`))
+  }
+
+  return writeFile(options.outfile, lines.join('\n'))
 }
