@@ -1,8 +1,18 @@
 # Changelog
 
-You can write some description in this file, it will not be overridden. :)
+## [0.7.2](https://github.com/Zolyn/changelogithub/compare/v0.7.1...v0.7.2) (2022-06-21)
 
-## [NEXT_VERSION](https://github.com/Zolyn/changelogithub/compare/v0.6.6...main) (2022-06-21)
+### 🐞 Bug Fixes
+
+- Remove redundant NEXT_VERSION changelog [`b0aaf40`](https://github.com/Zolyn/changelogithub/commit/b0aaf40)
+
+## [0.7.1](https://github.com/Zolyn/changelogithub/compare/v0.7.0...v0.7.1) (2022-06-21)
+
+### 🐞 Bug Fixes
+
+- Duplicate changelog when NEXT_VERSION becomes an avaliable tag [`23e52cb`](https://github.com/Zolyn/changelogithub/commit/23e52cb)
+
+# [0.7.0](https://github.com/Zolyn/changelogithub/compare/v0.6.6...v0.7.0) (2022-06-21)
 
 ### 🚀 Features
 
@@ -12,13 +22,6 @@ You can write some description in this file, it will not be overridden. :)
 ### 🐞 Bug Fixes
 
 - Duplicate changelog when generating changelog for NEXT_VERSION [`cc90bf6`](https://github.com/Zolyn/changelogithub/commit/cc90bf6)
-
-## [0.6.6](https://github.com/Zolyn/changelogithub/compare/v0.6.6...main) (2022-06-21)
-
-### 🚀 Features
-
-- Add `outfile` option [`91a1d65`](https://github.com/Zolyn/changelogithub/commit/91a1d65)
-- Generate changelog file [`f0c9f80`](https://github.com/Zolyn/changelogithub/commit/f0c9f80)
 
 ## [0.6.6](https://github.com/Zolyn/changelogithub/compare/v0.6.5...v0.6.6) (2022-06-18)
 
