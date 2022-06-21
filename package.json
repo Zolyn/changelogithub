@@ -1,18 +1,26 @@
 {
-  "name": "changelogithub",
+  "name": "@zolyn/changelogithub",
   "type": "module",
   "version": "0.6.6",
   "packageManager": "pnpm@7.2.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Generate changelog for GitHub.",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "contributors": [{
+    "name": "Anthony Fu",
+    "email": "anthonyfu117@hotmail.com"
+  },{
+    "name": "Yumeoto Zorin",
+    "email": "zorin1477@gmail.com"
+  }],
   "license": "MIT",
-  "funding": "https://github.com/sponsors/antfu",
-  "homepage": "https://github.com/antfu/changelogithub#readme",
+  "homepage": "https://github.com/Zolyn/changelogithub#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/changelogithub.git"
+    "url": "git+https://github.com/Zolyn/changelogithub.git"
   },
-  "bugs": "https://github.com/antfu/changelogithub/issues",
+  "bugs": "https://github.com/Zolyn/changelogithub/issues",
   "keywords": [
     "github",
     "release",
@@ -56,7 +64,8 @@
     "changelogen": "0.1.1",
     "execa": "^6.1.0",
     "kolorist": "^1.5.1",
-    "ohmyfetch": "^0.4.18"
+    "ohmyfetch": "^0.4.18",
+    "semver": "^7.3.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.25.1",
