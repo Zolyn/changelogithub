@@ -1,19 +1,22 @@
 {
   "name": "@zolyn/changelogithub",
   "type": "module",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "packageManager": "pnpm@7.2.0",
   "publishConfig": {
     "access": "public"
   },
   "description": "Generate changelog for GitHub.",
-  "contributors": [{
-    "name": "Anthony Fu",
-    "email": "anthonyfu117@hotmail.com"
-  },{
-    "name": "Yumeoto Zorin",
-    "email": "zorin1477@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Anthony Fu",
+      "email": "anthonyfu117@hotmail.com"
+    },
+    {
+      "name": "Yumeoto Zorin",
+      "email": "zorin1477@gmail.com"
+    }
+  ],
   "license": "MIT",
   "homepage": "https://github.com/Zolyn/changelogithub#readme",
   "repository": {
