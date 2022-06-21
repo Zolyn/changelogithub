@@ -96,12 +96,16 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
         lines.push(...result);
 
         const resolvedChangelog = await readFile(options.outfile, 'utf-8');
-        const changelogClip = resolvedChangelog.split(currentVer);
+        const nextVersionClip = resolvedChangelog.split(`[${NEXT_VERSION_MARK}]`);
+        const changelogClip = nextVersionClip.length > 1 ? nextVersionClip : resolvedChangelog.split(`[${currentVer}]`);        
         const changelogHeadClip = changelogClip[0].split('\n');
+        const currentVerHeading = changelogHeadClip[changelogHeadClip.length - 1];
+
         changelogHeadClip[changelogHeadClip.length - 1] = lines.join('\n');
+        changelogHeadClip.push(currentVerHeading)
         changelogClip[0] = changelogHeadClip.join('\n');
-        
-        return writeFile(options.outfile, changelogClip.join(currentVer));
+
+        return writeFile(options.outfile, changelogClip.join(`[${currentVer}]`));
     }
 
     return writeFile(options.outfile, lines.join('\n'));
