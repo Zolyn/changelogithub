@@ -87,7 +87,7 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
     }
   }
   else {
-    const { currentVer, releaseVer, result } = await genChangelog(options, content.replaceAll('&nbsp;', ''))
+    const { currentVer, result } = await genChangelog(options, content.replaceAll('&nbsp;', ''))
 
     if (currentVer === INITIAL_VERSION_MARK) {
       incompleteChangelogError(options.outfile)
@@ -99,15 +99,12 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
     const resolvedChangelog = await readFile(options.outfile, 'utf-8')
     let nextVersionClip = resolvedChangelog.split(`[${NEXT_VERSION_MARK}]`)
 
-    let changelogClip: string[] = resolvedChangelog.split(`[${currentVer}]`)
+    const changelogClip: string[] = resolvedChangelog.split(`[${currentVer}]`)
 
     if (!(changelogClip.length > 1)) {
       incompleteChangelogError(options.outfile)
       return
     }
-
-    if (releaseVer === NEXT_VERSION_MARK && nextVersionClip.length > 1)
-      changelogClip = nextVersionClip
 
     let changelogHeadClip = changelogClip[0].split('\n')
 

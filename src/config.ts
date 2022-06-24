@@ -27,7 +27,7 @@ export async function resolveConfig(options: ChangelogOptions) {
     overrides: options,
   })
 
-  config.contributors = !config.outfile;
+  config.contributors = !config.outfile
   config.from = config.from || await getLastGitTag()
   config.to = config.to || await getCurrentGitBranch()
   config.github = config.github || await getGitHubRepo()
