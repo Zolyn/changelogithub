@@ -1,3 +1,5 @@
+import { execCommand } from './utils'
+
 export async function getGitHubRepo() {
   const url = await execCommand('git', ['config', '--get', 'remote.origin.url'])
   const match = url.match(/github\.com[\/:]([\w\d._-]+?)\/([\w\d._-]+?)(\.git)?$/i)
@@ -10,7 +12,7 @@ export async function getCurrentGitBranch() {
   return await execCommand('git', ['tag', '--points-at', 'HEAD']) || await execCommand('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
 }
 
-export async function getCommitTime(id: string) {
+export async function getGitCommitTime(id: string) {
   return execCommand('git', ['log', '--format=%ct', id]).then(r => r.split('\n')[0])
 }
 
@@ -44,10 +46,3 @@ export async function getFirstGitCommit() {
 export function isPrerelease(version: string) {
   return version.includes('-')
 }
-
-async function execCommand(cmd: string, args: string[]) {
-  const { execa } = await import('execa')
-  const res = await execa(cmd, args)
-  return res.stdout.trim()
-}
-

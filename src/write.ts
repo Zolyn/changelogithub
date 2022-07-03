@@ -3,7 +3,7 @@ import semver from 'semver'
 import { bold, red, yellow } from 'kolorist'
 import type { ResolvedChangelogOptions } from './types'
 import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
-import { getCommitTime, getCurrentGitBranch, getFirstGitCommit, getGitTags } from './git'
+import { getGitCommitTime, getCurrentGitBranch, getFirstGitCommit, getGitTags } from './git'
 import { generate } from './generate'
 
 export function formatTime(val: number): string {
@@ -19,7 +19,7 @@ export async function genChangelog(config: ResolvedChangelogOptions, md: string)
 
   const compareLink = `[${releaseVer}](https://github.com/${config.github}/compare/${config.from}...${config.to})`
 
-  const time = new Date(parseInt(await getCommitTime(config.to), 10) * 1000)
+  const time = new Date(parseInt(await getGitCommitTime(config.to), 10) * 1000)
   const year = time.getFullYear()
   const month = time.getMonth() + 1
   const date = time.getDate()
