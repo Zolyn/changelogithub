@@ -1,6 +1,6 @@
 # changelogithub
 
-[![NPM version](https://img.shields.io/npm/v/changelogithub?color=a1b858&label=)](https://www.npmjs.com/package/changelogithub)
+[![NPM version](https://img.shields.io/npm/v/changelogithub?color=a1b858\&label=)](https://www.npmjs.com/package/changelogithub)
 
 Generate changelog for GitHub releases from [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), powered by [changelogen](https://github.com/unjs/changelogen).
 
@@ -8,10 +8,15 @@ Generate changelog for GitHub releases from [Conventional Commits](https://www.c
 
 ## Features
 
-- Support exclamation mark as breaking change, e.g. `chore!: drop node v10`
-- Grouped scope in changelog
-- Create the release note, or update the existing one
-- List contributors
+*   Support exclamation mark as breaking change, e.g. `chore!: drop node v10`
+
+*   Grouped scope in changelog
+
+*   Create the release note, or update the existing one
+
+*   List contributors
+
+*   Generate changelog file
 
 ## Usage
 
@@ -46,6 +51,12 @@ jobs:
 
 It will be trigged whenever you push a tag to GitHub that starts with `v`.
 
+Generate changelog file:
+
+```bash
+changelogithub -o CHANGELOG.md --contributors false --emoji false
+```
+
 ## Configuration
 
 You can put a configuration file in the project root, named as `changelogithub.config.{json,ts,js,mjs,cjs}`, `.changelogithubrc` or use the `changelogithub` field in `package.json`.
@@ -62,4 +73,4 @@ I used to use [`conventional-github-releaser`](https://github.com/conventional-c
 
 ## License
 
-[MIT](./LICENSE) License © 2022 [Anthony Fu](https://github.com/antfu)
+[MIT](./LICENSE) License  2022 [Anthony Fu](https://github.com/antfu)
