@@ -36,7 +36,6 @@ cli
       const { config, md, commits } = await generate(args as any)
 
       const rawMD = md.replaceAll('&nbsp;', '')
-      console.log(bold(config.github))
       console.log(cyan(config.from) + dim(' -> ') + blue(config.to) + dim(` (${commits.length} commits)`))
       console.log(dim('--------------'))
       console.log()
