@@ -55,7 +55,7 @@ export async function getFirstGitCommit() {
 /**
  * ! Unstable feature: Generate correct reference links for fork repo
  * The references in the commits of the upstream belong to the upstream,
- * and the references in the commits which is ahead of the upstream repository belong to the origin
+ * and the references in the commits which are ahead of the upstream repository belong to the origin
  */
 export async function getUpstreamRepo(): Promise<UpstreamRepoInfo> {
   let repo: string | undefined
