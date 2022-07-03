@@ -59,7 +59,8 @@
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --push --tag",
     "start": "nr dev && node cli.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "changelog": "nr start -o CHANGELOG.md --contributors false --emoji false --out-only"
   },
   "dependencies": {
     "@antfu/utils": "^0.5.2",
