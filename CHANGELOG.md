@@ -1,6 +1,6 @@
 # Changelog
 
-## [NEXT_VERSION](https://github.com/Zolyn/changelogithub/compare/v0.7.3...main) (2022-07-03)
+# [0.8.0](https://github.com/Zolyn/changelogithub/compare/v0.7.3...v0.8.0) (2022-07-03)
 
 ### Features
 
