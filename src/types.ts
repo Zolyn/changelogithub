@@ -34,7 +34,7 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
   /**
    * Write the changelog only.
    */
-  outOnly?: boolean;
+  outOnly?: boolean
   /**
    * Whether to include contributors in release notes.
    *
@@ -87,4 +87,9 @@ export interface AuthorInfo {
   login?: string
   email: string
   name: string
+}
+
+export interface UpstreamRepoInfo {
+  repo?: string
+  defaultBranch?: string
 }

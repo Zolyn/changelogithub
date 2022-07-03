@@ -3,7 +3,7 @@ import semver from 'semver'
 import { bold, red, white } from 'kolorist'
 import type { ResolvedChangelogOptions } from './types'
 import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
-import { getGitCommitTime, getCurrentGitBranch, getFirstGitCommit, getGitTags } from './git'
+import { getCurrentGitBranch, getFirstGitCommit, getGitCommitTime, getGitTags, getReferenceRepo, getUpstreamRepo } from './git'
 import { generate } from './generate'
 
 export function formatTime(val: number): string {
@@ -60,6 +60,8 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
 
   const lines: string[] = []
 
+  const upstreamInfo = await getUpstreamRepo()
+
   // Generate full changelog
   if (needCreateFile) {
     const tags = await getGitTags()
@@ -72,6 +74,7 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
     for (let i = tags.length - 1; i >= 0; i -= 1) {
       let from = tags[i - 1]
       const to = tags[i]
+      const github = await getReferenceRepo(upstreamInfo, to, options.github)
 
       if (i === tags.length - 1)
         lines.push('# Changelog', '')
@@ -83,6 +86,7 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
         ...options,
         from,
         to,
+        github,
       })
 
       lines.push(...(await genChangelog(config, md.replaceAll('&nbsp;', ''))).result)
@@ -90,6 +94,8 @@ export async function writeChangelog(options: ResolvedChangelogOptions, content:
   }
   // Patch changelog
   else {
+    options.github = await getReferenceRepo(upstreamInfo, options.to, options.github)
+
     const { currentVer, result } = await genChangelog(options, content.replaceAll('&nbsp;', ''))
 
     if (currentVer === INITIAL_VERSION_MARK) {
