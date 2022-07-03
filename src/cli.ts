@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { blue, bold, cyan, dim, red, yellow } from 'kolorist'
+import { blue, bold, cyan, dim, red, yellow, green } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
 import { writeChangelog } from './write'
@@ -22,6 +22,7 @@ cli
   .option('--group', 'Nest commit messages under their scopes')
   .option('--dry', 'Dry run')
   .option('-o, --outfile <path>', 'Write the changelog to this file')
+  .option('--out-only', 'Write the changelog only')
   .help()
 
 cli
@@ -50,6 +51,11 @@ cli
 
       if (config.outfile)
         await writeChangelog(config, md)
+
+      if (config.outOnly) {
+        console.log(green('Done.'));
+        return;
+      }
 
       if (!config.token) {
         console.error(red('No GitHub token found, specify it via GITHUB_TOKEN env. Release skipped.'))
