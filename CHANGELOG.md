@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.3](https://github.com/Zolyn/changelogithub/compare/v0.7.2...v0.7.3) (2022-06-24)
+
+### 🚀 Features
+
+- Change `contributors` to `false` when generating changelog [`4ec7899`](https://github.com/Zolyn/changelogithub/commit/4ec7899)
+
+### 🐞 Bug Fixes
+
+- Incorrect version generation [`83eb0cf`](https://github.com/Zolyn/changelogithub/commit/83eb0cf)
+
 ## [0.7.2](https://github.com/Zolyn/changelogithub/compare/v0.7.1...v0.7.2) (2022-06-21)
 
 ### 🐞 Bug Fixes
