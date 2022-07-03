@@ -1,5 +1,16 @@
 # Changelog
 
+# [0.9.0](https://github.com/Zolyn/changelogithub/compare/v0.8.0...v0.9.0) (2022-07-04)
+
+### Features
+
+- Generate correct reference links for fork repo (unstable feature) - ([<samp>dcdfd</samp>](https://github.com/Zolyn/changelogithub/commit/dcdfdda))
+- **cli**: Add option `--out-only` - ([<samp>2258d</samp>](https://github.com/Zolyn/changelogithub/commit/2258da4))
+
+### Bug Fixes
+
+- Change log color && add comments - ([<samp>0e30d</samp>](https://github.com/Zolyn/changelogithub/commit/0e30d43))
+
 # [0.8.0](https://github.com/Zolyn/changelogithub/compare/v0.7.3...v0.8.0) (2022-07-03)
 
 ### Features
@@ -43,231 +54,231 @@
 
 - Duplicate changelog when generating changelog for NEXT_VERSION - ([<samp>cc90b</samp>](https://github.com/Zolyn/changelogithub/commit/cc90bf6))
 
-## [0.6.6](https://github.com/Zolyn/changelogithub/compare/v0.6.5...v0.6.6) (2022-06-18)
+## [0.6.6](https://github.com/antfu/changelogithub/compare/v0.6.5...v0.6.6) (2022-06-18)
 
 ### Bug Fixes
 
-- Fallback to the first git commit, close - in https://github.com/Zolyn/changelogithub/issues/14
+- Fallback to the first git commit, close - in [<samp>#14</samp>](https://github.com/antfu/changelogithub/issues/14)
 
-## [0.6.5](https://github.com/Zolyn/changelogithub/compare/v0.6.4...v0.6.5) (2022-06-15)
-
-### Bug Fixes
-
-- Cli name - in https://github.com/Zolyn/changelogithub/issues/13
-- Dedupe contributors - ([<samp>a911f</samp>](https://github.com/Zolyn/changelogithub/commit/a911feb))
-
-## [0.6.4](https://github.com/Zolyn/changelogithub/compare/v0.6.3...v0.6.4) (2022-06-15)
+## [0.6.5](https://github.com/antfu/changelogithub/compare/v0.6.4...v0.6.5) (2022-06-15)
 
 ### Bug Fixes
 
-- Github tag check - ([<samp>80aac</samp>](https://github.com/Zolyn/changelogithub/commit/80aac7a))
+- Cli name - in [<samp>#13</samp>](https://github.com/antfu/changelogithub/issues/13)
+- Dedupe contributors - ([<samp>a911f</samp>](https://github.com/antfu/changelogithub/commit/a911feb))
 
-## [0.6.3](https://github.com/Zolyn/changelogithub/compare/v0.6.2...v0.6.3) (2022-06-15)
-
-### Bug Fixes
-
-- `isRefGitTag` check - ([<samp>81f6b</samp>](https://github.com/Zolyn/changelogithub/commit/81f6bdc))
-
-## [0.6.2](https://github.com/Zolyn/changelogithub/compare/v0.6.1...v0.6.2) (2022-06-15)
+## [0.6.4](https://github.com/antfu/changelogithub/compare/v0.6.3...v0.6.4) (2022-06-15)
 
 ### Bug Fixes
 
-- `isRefGitTag` check - ([<samp>ef606</samp>](https://github.com/Zolyn/changelogithub/commit/ef606e4))
+- Github tag check - ([<samp>80aac</samp>](https://github.com/antfu/changelogithub/commit/80aac7a))
 
-## [0.6.1](https://github.com/Zolyn/changelogithub/compare/v0.6.0...v0.6.1) (2022-06-15)
+## [0.6.3](https://github.com/antfu/changelogithub/compare/v0.6.2...v0.6.3) (2022-06-15)
 
 ### Bug Fixes
 
-- Remove github tag check for now - ([<samp>604ee</samp>](https://github.com/Zolyn/changelogithub/commit/604ee5b))
+- `isRefGitTag` check - ([<samp>81f6b</samp>](https://github.com/antfu/changelogithub/commit/81f6bdc))
 
-# [0.6.0](https://github.com/Zolyn/changelogithub/compare/v0.5.1...v0.6.0) (2022-06-15)
+## [0.6.2](https://github.com/antfu/changelogithub/compare/v0.6.1...v0.6.2) (2022-06-15)
+
+### Bug Fixes
+
+- `isRefGitTag` check - ([<samp>ef606</samp>](https://github.com/antfu/changelogithub/commit/ef606e4))
+
+## [0.6.1](https://github.com/antfu/changelogithub/compare/v0.6.0...v0.6.1) (2022-06-15)
+
+### Bug Fixes
+
+- Remove github tag check for now - ([<samp>604ee</samp>](https://github.com/antfu/changelogithub/commit/604ee5b))
+
+# [0.6.0](https://github.com/antfu/changelogithub/compare/v0.5.1...v0.6.0) (2022-06-15)
 
 ### Features
 
-- Use `cac` for cli parser, close - in https://github.com/Zolyn/changelogithub/issues/12
-- Check tag's availability on GitHub - ([<samp>6f680</samp>](https://github.com/Zolyn/changelogithub/commit/6f68066))
+- Use `cac` for cli parser, close - in [<samp>#12</samp>](https://github.com/antfu/changelogithub/issues/12)
+- Check tag's availability on GitHub - ([<samp>6f680</samp>](https://github.com/antfu/changelogithub/commit/6f68066))
 
 ### Bug Fixes
 
-- Check if it's a git tag, close - in https://github.com/Zolyn/changelogithub/issues/10
+- Check if it's a git tag, close - in [<samp>#10</samp>](https://github.com/antfu/changelogithub/issues/10)
 
-## [0.5.1](https://github.com/Zolyn/changelogithub/compare/v0.5.0...v0.5.1) (2022-06-14)
+## [0.5.1](https://github.com/antfu/changelogithub/compare/v0.5.0...v0.5.1) (2022-06-14)
 
 ### Features
 
-- New `capitalize` and `groupByScope` options - in https://github.com/Zolyn/changelogithub/issues/8
+- New `capitalize` and `groupByScope` options - in [<samp>#8</samp>](https://github.com/antfu/changelogithub/issues/8)
 
-# [0.5.0](https://github.com/Zolyn/changelogithub/compare/v0.4.1...v0.5.0) (2022-06-14)
+# [0.5.0](https://github.com/antfu/changelogithub/compare/v0.4.1...v0.5.0) (2022-06-14)
 
 ### Breaking Changes
 
-- Change config interface - ([<samp>3bd35</samp>](https://github.com/Zolyn/changelogithub/commit/3bd35cc))
+- Change config interface - ([<samp>3bd35</samp>](https://github.com/antfu/changelogithub/commit/3bd35cc))
 
 ### Features
 
-- Respect `scopeMap` - ([<samp>2ba1c</samp>](https://github.com/Zolyn/changelogithub/commit/2ba1c50))
-- Config to disable contributors section - ([<samp>f95df</samp>](https://github.com/Zolyn/changelogithub/commit/f95dfb6))
+- Respect `scopeMap` - ([<samp>2ba1c</samp>](https://github.com/antfu/changelogithub/commit/2ba1c50))
+- Config to disable contributors section - ([<samp>f95df</samp>](https://github.com/antfu/changelogithub/commit/f95dfb6))
 
-## [0.4.1](https://github.com/Zolyn/changelogithub/compare/v0.4.0...v0.4.1) (2022-06-14)
+## [0.4.1](https://github.com/antfu/changelogithub/compare/v0.4.0...v0.4.1) (2022-06-14)
 
 ### Features
 
-- Expose `defineConfig` utils - ([<samp>b58be</samp>](https://github.com/Zolyn/changelogithub/commit/b58be66))
-- Improve error message - ([<samp>4b1ad</samp>](https://github.com/Zolyn/changelogithub/commit/4b1add5))
-- **core**: Support loading options from config file - in https://github.com/Zolyn/changelogithub/issues/6
+- Expose `defineConfig` utils - ([<samp>b58be</samp>](https://github.com/antfu/changelogithub/commit/b58be66))
+- Improve error message - ([<samp>4b1ad</samp>](https://github.com/antfu/changelogithub/commit/4b1add5))
+- **core**: Support loading options from config file - in [<samp>#6</samp>](https://github.com/antfu/changelogithub/issues/6)
 
 ### Performance
 
-- Reduce deps - ([<samp>5f8b1</samp>](https://github.com/Zolyn/changelogithub/commit/5f8b18a))
+- Reduce deps - ([<samp>5f8b1</samp>](https://github.com/antfu/changelogithub/commit/5f8b18a))
 
-# [0.4.0](https://github.com/Zolyn/changelogithub/compare/v0.3.0...v0.4.0) (2022-06-14)
+# [0.4.0](https://github.com/antfu/changelogithub/compare/v0.3.0...v0.4.0) (2022-06-14)
 
 ### Features
 
-- Contributors section - ([<samp>4a7ee</samp>](https://github.com/Zolyn/changelogithub/commit/4a7ee8f))
+- Contributors section - ([<samp>4a7ee</samp>](https://github.com/antfu/changelogithub/commit/4a7ee8f))
 
 ### Bug Fixes
 
-- Increase section title indentation - ([<samp>95c55</samp>](https://github.com/Zolyn/changelogithub/commit/95c5591))
+- Increase section title indentation - ([<samp>95c55</samp>](https://github.com/antfu/changelogithub/commit/95c5591))
 
-# [0.3.0](https://github.com/Zolyn/changelogithub/compare/v0.2.1...v0.3.0) (2022-06-13)
-
-### Features
-
-- Nested scope - ([<samp>ac7f3</samp>](https://github.com/Zolyn/changelogithub/commit/ac7f366))
-
-## [0.2.1](https://github.com/Zolyn/changelogithub/compare/v0.2.0...v0.2.1) (2022-06-13)
+# [0.3.0](https://github.com/antfu/changelogithub/compare/v0.2.1...v0.3.0) (2022-06-13)
 
 ### Features
 
-- Refactor cli - ([<samp>b8412</samp>](https://github.com/Zolyn/changelogithub/commit/b8412b1))
+- Nested scope - ([<samp>ac7f3</samp>](https://github.com/antfu/changelogithub/commit/ac7f366))
+
+## [0.2.1](https://github.com/antfu/changelogithub/compare/v0.2.0...v0.2.1) (2022-06-13)
+
+### Features
+
+- Refactor cli - ([<samp>b8412</samp>](https://github.com/antfu/changelogithub/commit/b8412b1))
 
 ### Bug Fixes
 
-- Matching name with dot, close - in https://github.com/Zolyn/changelogithub/issues/3
+- Matching name with dot, close - in [<samp>#3</samp>](https://github.com/antfu/changelogithub/issues/3)
 
-# [0.2.0](https://github.com/Zolyn/changelogithub/compare/v0.1.10...v0.2.0) (2022-06-13)
+# [0.2.0](https://github.com/antfu/changelogithub/compare/v0.1.10...v0.2.0) (2022-06-13)
 
 ### Breaking Changes
 
-- Do not generate `docs:` by default - ([<samp>e8a83</samp>](https://github.com/Zolyn/changelogithub/commit/e8a83d5))
+- Do not generate `docs:` by default - ([<samp>e8a83</samp>](https://github.com/antfu/changelogithub/commit/e8a83d5))
 
 ### Bug Fixes
 
-- Stale order of each section - ([<samp>1da54</samp>](https://github.com/Zolyn/changelogithub/commit/1da54fe))
+- Stale order of each section - ([<samp>1da54</samp>](https://github.com/antfu/changelogithub/commit/1da54fe))
 
-## [0.1.10](https://github.com/Zolyn/changelogithub/compare/v0.1.9...v0.1.10) (2022-06-13)
+## [0.1.10](https://github.com/antfu/changelogithub/compare/v0.1.9...v0.1.10) (2022-06-13)
 
 ### Features
 
-- Support ssh urls - in https://github.com/Zolyn/changelogithub/issues/1
+- Support ssh urls - in [<samp>#1</samp>](https://github.com/antfu/changelogithub/issues/1)
 
-## [0.1.9](https://github.com/Zolyn/changelogithub/compare/v0.1.8...v0.1.9) (2022-06-13)
-
-### Features
-
-- Improve github changes style - ([<samp>5c141</samp>](https://github.com/Zolyn/changelogithub/commit/5c141be))
-
-## [0.1.8](https://github.com/Zolyn/changelogithub/compare/v0.1.7...v0.1.8) (2022-06-13)
-
-### Bug Fixes
-
-- Changelog generation - ([<samp>34fd4</samp>](https://github.com/Zolyn/changelogithub/commit/34fd4d8))
-
-## [0.1.7](https://github.com/Zolyn/changelogithub/compare/v0.1.6...v0.1.7) (2022-06-13)
-
-### Bug Fixes
-
-- Update github match regex - ([<samp>63aca</samp>](https://github.com/Zolyn/changelogithub/commit/63aca62))
-
-## [0.1.6](https://github.com/Zolyn/changelogithub/compare/v0.1.5...v0.1.6) (2022-06-13)
-
-### Bug Fixes
-
-- Always display breaking changes regardless of the type - ([<samp>42703</samp>](https://github.com/Zolyn/changelogithub/commit/42703c4))
-
-## [0.1.5](https://github.com/Zolyn/changelogithub/compare/v0.1.4...v0.1.5) (2022-06-13)
-
-### Bug Fixes
-
-- Markdown format - ([<samp>4990a</samp>](https://github.com/Zolyn/changelogithub/commit/4990a3d))
-
-## [0.1.4](https://github.com/Zolyn/changelogithub/compare/v0.1.3...v0.1.4) (2022-06-13)
-
-### Bug Fixes
-
-- Proper display refs - ([<samp>64d9c</samp>](https://github.com/Zolyn/changelogithub/commit/64d9c08))
-
-## [0.1.3](https://github.com/Zolyn/changelogithub/compare/v0.1.2...v0.1.3) (2022-06-13)
+## [0.1.9](https://github.com/antfu/changelogithub/compare/v0.1.8...v0.1.9) (2022-06-13)
 
 ### Features
 
-- Imporve markdown style - ([<samp>199e5</samp>](https://github.com/Zolyn/changelogithub/commit/199e5c8))
+- Improve github changes style - ([<samp>5c141</samp>](https://github.com/antfu/changelogithub/commit/5c141be))
 
-## [0.1.2](https://github.com/Zolyn/changelogithub/compare/v0.1.1...v0.1.2) (2022-06-13)
-
-### Bug Fixes
-
-- Bin - ([<samp>67d63</samp>](https://github.com/Zolyn/changelogithub/commit/67d6310))
-
-## [0.1.1](https://github.com/Zolyn/changelogithub/compare/v0.1.0...v0.1.1) (2022-06-13)
+## [0.1.8](https://github.com/antfu/changelogithub/compare/v0.1.7...v0.1.8) (2022-06-13)
 
 ### Bug Fixes
 
-- Allow updating existing release - ([<samp>0f487</samp>](https://github.com/Zolyn/changelogithub/commit/0f48765))
+- Changelog generation - ([<samp>34fd4</samp>](https://github.com/antfu/changelogithub/commit/34fd4d8))
 
-# [0.1.0](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.6...v0.1.0) (2022-06-13)
+## [0.1.7](https://github.com/antfu/changelogithub/compare/v0.1.6...v0.1.7) (2022-06-13)
+
+### Bug Fixes
+
+- Update github match regex - ([<samp>63aca</samp>](https://github.com/antfu/changelogithub/commit/63aca62))
+
+## [0.1.6](https://github.com/antfu/changelogithub/compare/v0.1.5...v0.1.6) (2022-06-13)
+
+### Bug Fixes
+
+- Always display breaking changes regardless of the type - ([<samp>42703</samp>](https://github.com/antfu/changelogithub/commit/42703c4))
+
+## [0.1.5](https://github.com/antfu/changelogithub/compare/v0.1.4...v0.1.5) (2022-06-13)
+
+### Bug Fixes
+
+- Markdown format - ([<samp>4990a</samp>](https://github.com/antfu/changelogithub/commit/4990a3d))
+
+## [0.1.4](https://github.com/antfu/changelogithub/compare/v0.1.3...v0.1.4) (2022-06-13)
+
+### Bug Fixes
+
+- Proper display refs - ([<samp>64d9c</samp>](https://github.com/antfu/changelogithub/commit/64d9c08))
+
+## [0.1.3](https://github.com/antfu/changelogithub/compare/v0.1.2...v0.1.3) (2022-06-13)
 
 ### Features
 
-- Improve sha display - ([<samp>dfba1</samp>](https://github.com/Zolyn/changelogithub/commit/dfba1b3))
+- Imporve markdown style - ([<samp>199e5</samp>](https://github.com/antfu/changelogithub/commit/199e5c8))
 
-## [0.0.3-beta.6](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.5...v0.0.3-beta.6) (2022-06-13)
-
-### Bug Fixes
-
-- Improve tag detection - ([<samp>b9917</samp>](https://github.com/Zolyn/changelogithub/commit/b99178c))
-
-## [0.0.3-beta.5](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.4...v0.0.3-beta.5) (2022-06-13)
+## [0.1.2](https://github.com/antfu/changelogithub/compare/v0.1.1...v0.1.2) (2022-06-13)
 
 ### Bug Fixes
 
-- Generation error - ([<samp>489b2</samp>](https://github.com/Zolyn/changelogithub/commit/489b23f))
+- Bin - ([<samp>67d63</samp>](https://github.com/antfu/changelogithub/commit/67d6310))
 
-## [0.0.3-beta.4](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.3...v0.0.3-beta.4) (2022-06-13)
-
-### Bug Fixes
-
-- Update lock - ([<samp>0690a</samp>](https://github.com/Zolyn/changelogithub/commit/0690a49))
-
-## [0.0.3-beta.3](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.2...v0.0.3-beta.3) (2022-06-13)
+## [0.1.1](https://github.com/antfu/changelogithub/compare/v0.1.0...v0.1.1) (2022-06-13)
 
 ### Bug Fixes
 
-- Dist - ([<samp>25072</samp>](https://github.com/Zolyn/changelogithub/commit/250725b))
+- Allow updating existing release - ([<samp>0f487</samp>](https://github.com/antfu/changelogithub/commit/0f48765))
 
-## [0.0.3-beta.2](https://github.com/Zolyn/changelogithub/compare/v0.0.3-beta.1...v0.0.3-beta.2) (2022-06-13)
+# [0.1.0](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.6...v0.1.0) (2022-06-13)
 
 ### Features
 
-- Use changelogen - ([<samp>9c583</samp>](https://github.com/Zolyn/changelogithub/commit/9c5830c))
-- Setup build - ([<samp>232f5</samp>](https://github.com/Zolyn/changelogithub/commit/232f57d))
+- Improve sha display - ([<samp>dfba1</samp>](https://github.com/antfu/changelogithub/commit/dfba1b3))
 
-## [0.0.3-beta.1](https://github.com/Zolyn/changelogithub/compare/v0.0.2-beta.1...v0.0.3-beta.1) (2022-06-13)
+## [0.0.3-beta.6](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.5...v0.0.3-beta.6) (2022-06-13)
+
+### Bug Fixes
+
+- Improve tag detection - ([<samp>b9917</samp>](https://github.com/antfu/changelogithub/commit/b99178c))
+
+## [0.0.3-beta.5](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.4...v0.0.3-beta.5) (2022-06-13)
+
+### Bug Fixes
+
+- Generation error - ([<samp>489b2</samp>](https://github.com/antfu/changelogithub/commit/489b23f))
+
+## [0.0.3-beta.4](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.3...v0.0.3-beta.4) (2022-06-13)
+
+### Bug Fixes
+
+- Update lock - ([<samp>0690a</samp>](https://github.com/antfu/changelogithub/commit/0690a49))
+
+## [0.0.3-beta.3](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.2...v0.0.3-beta.3) (2022-06-13)
+
+### Bug Fixes
+
+- Dist - ([<samp>25072</samp>](https://github.com/antfu/changelogithub/commit/250725b))
+
+## [0.0.3-beta.2](https://github.com/antfu/changelogithub/compare/v0.0.3-beta.1...v0.0.3-beta.2) (2022-06-13)
+
+### Features
+
+- Use changelogen - ([<samp>9c583</samp>](https://github.com/antfu/changelogithub/commit/9c5830c))
+- Setup build - ([<samp>232f5</samp>](https://github.com/antfu/changelogithub/commit/232f57d))
+
+## [0.0.3-beta.1](https://github.com/antfu/changelogithub/compare/v0.0.2-beta.1...v0.0.3-beta.1) (2022-06-13)
 
 ### Breaking Changes
 
-- Update all deps - ([<samp>79de9</samp>](https://github.com/Zolyn/changelogithub/commit/79de98f))
-- Migarte to ESM - ([<samp>003a7</samp>](https://github.com/Zolyn/changelogithub/commit/003a73a))
+- Update all deps - ([<samp>79de9</samp>](https://github.com/antfu/changelogithub/commit/79de98f))
+- Migarte to ESM - ([<samp>003a7</samp>](https://github.com/antfu/changelogithub/commit/003a73a))
 
-## [0.0.2-beta.1](https://github.com/Zolyn/changelogithub/compare/9e18461792fbc21eb2332434f5d8d69a402c2655...v0.0.2-beta.1) (2022-06-13)
+## [0.0.2-beta.1](https://github.com/antfu/changelogithub/compare/9e18461792fbc21eb2332434f5d8d69a402c2655...v0.0.2-beta.1) (2022-06-13)
 
 ### Breaking Changes
 
-- Require Node v12 - ([<samp>e97ca</samp>](https://github.com/Zolyn/changelogithub/commit/e97cad8))
+- Require Node v12 - ([<samp>e97ca</samp>](https://github.com/antfu/changelogithub/commit/e97cad8))
 
 ### Features
 
-- Default preset to angular - ([<samp>88ff4</samp>](https://github.com/Zolyn/changelogithub/commit/88ff4fa))
-- Read from `GITHUB_TOKEN` - ([<samp>04ce8</samp>](https://github.com/Zolyn/changelogithub/commit/04ce83c))
-- Action - ([<samp>d747f</samp>](https://github.com/Zolyn/changelogithub/commit/d747f6d))
+- Default preset to angular - ([<samp>88ff4</samp>](https://github.com/antfu/changelogithub/commit/88ff4fa))
+- Read from `GITHUB_TOKEN` - ([<samp>04ce8</samp>](https://github.com/antfu/changelogithub/commit/04ce83c))
+- Action - ([<samp>d747f</samp>](https://github.com/antfu/changelogithub/commit/d747f6d))
