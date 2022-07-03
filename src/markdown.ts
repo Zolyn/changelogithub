@@ -3,7 +3,9 @@ import type { Commit, ResolvedChangelogOptions } from './types'
 
 const emojisRE = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
 
-function formatReferences(references: string[], github: string, type: 'pr' | 'hash'): string {
+function formatReferences(references: string[], options: ResolvedChangelogOptions, type: 'pr' | 'hash'): string {
+  const { github, outfile } = options
+
   const refs = references
     .filter((ref) => {
       if (type === 'pr')
@@ -15,8 +17,12 @@ function formatReferences(references: string[], github: string, type: 'pr' | 'ha
       if (!github)
         return ref
 
-      if (type === 'pr')
+      if (type === 'pr') {
+        if (outfile)
+          return `[<samp>${ref}</samp>](https://github.com/${github}/issues/${ref.slice(1)})`
+
         return `https://github.com/${github}/issues/${ref.slice(1)}`
+      }
 
       return `[<samp>${ref.slice(0, 5)}</samp>](https://github.com/${github}/commit/${ref})`
     })
@@ -30,8 +36,8 @@ function formatReferences(references: string[], github: string, type: 'pr' | 'ha
 }
 
 function formatLine(commit: Commit, options: ResolvedChangelogOptions) {
-  const prRefs = formatReferences(commit.references, options.github, 'pr')
-  const hashRefs = formatReferences(commit.references, options.github, 'hash')
+  const prRefs = formatReferences(commit.references, options, 'pr')
+  const hashRefs = formatReferences(commit.references, options, 'hash')
 
   let authors = join([...new Set(commit.resolvedAuthors?.map(i => i.login ? `@${i.login}` : `**${i.name}**`))])?.trim()
   if (authors)

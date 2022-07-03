@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { blue, bold, cyan, dim, red, yellow, green } from 'kolorist'
+import { blue, bold, cyan, dim, green, red, yellow } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
 import { writeChangelog } from './write'
@@ -53,8 +53,8 @@ cli
         await writeChangelog(config, md)
 
       if (config.outOnly) {
-        console.log(green('Done.'));
-        return;
+        console.log(green('Done.'))
+        return
       }
 
       if (!config.token) {
