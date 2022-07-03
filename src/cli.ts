@@ -3,7 +3,7 @@ import { blue, bold, cyan, dim, red, yellow } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
 import { writeChangelog } from './write'
-import { generate, hasTagOnGitHub, sendRelease } from './index'
+import { generate, hasTagOnGitHub, isRepoShallow, sendRelease } from './index'
 
 const cli = cac('changelogithub')
 
@@ -18,6 +18,8 @@ cli
   .option('--prerelease', 'Mark release as prerelease')
   .option('-d, --draft', 'Mark release as draft')
   .option('--capitalize', 'Should capitalize for each comment message')
+  .option('--emoji', 'Use emojis in section titles', { default: true })
+  .option('--group', 'Nest commit messages under their scopes')
   .option('--dry', 'Dry run')
   .option('-o, --outfile <path>', 'Write the changelog to this file')
   .help()
@@ -51,18 +53,24 @@ cli
         await writeChangelog(config, md)
 
       if (!config.token) {
-        console.log(red('No GitHub token found, specify it via GITHUB_TOKEN env. Release skipped.'))
+        console.error(red('No GitHub token found, specify it via GITHUB_TOKEN env. Release skipped.'))
         process.exitCode = 1
         return
       }
 
       if (!await hasTagOnGitHub(config.to, config)) {
-        console.log(yellow(`Current ref "${bold(config.to)}" is not available as tags on GitHub. Release skipped.`))
+        console.error(yellow(`Current ref "${bold(config.to)}" is not available as tags on GitHub. Release skipped.`))
         process.exitCode = 1
         return
       }
 
       await sendRelease(config, md)
+
+      if (!commits.length && await isRepoShallow()) {
+        console.error(yellow('The repo seems to be clone shallowly, which make changelog failed to generate. You might want to specify `fetch-depth: 0` in your CI config.'))
+        process.exitCode = 1
+        return
+      }
     }
     catch (e: any) {
       console.error(red(String(e)))
@@ -73,4 +81,3 @@ cli
   })
 
 cli.parse()
-

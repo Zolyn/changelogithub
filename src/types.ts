@@ -1,3 +1,5 @@
+import type { GitCommit } from 'changelogen'
+
 export interface GitHubRepo {
   owner: string
   repo: string
@@ -14,6 +16,10 @@ export interface ChangelogenOptions {
   github: string
   from: string
   to: string
+}
+
+export interface Commit extends GitCommit {
+  resolvedAuthors?: AuthorInfo[]
 }
 
 export interface ChangelogOptions extends Partial<ChangelogenOptions> {
@@ -52,7 +58,6 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
    */
   titles?: {
     breakingChanges?: string
-    contributors?: string
   }
   /**
    * Capitalize commit messages
@@ -63,7 +68,12 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
    * Nest commit messages under their scopes
    * @default true
    */
-  groupByScope?: boolean
+  group?: boolean
+  /**
+   * Use emojis in section titles
+   * @default true
+   */
+  emoji?: boolean
 }
 
 export type ResolvedChangelogOptions = Required<ChangelogOptions>

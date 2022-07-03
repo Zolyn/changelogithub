@@ -1,42 +1,81 @@
-import type { GitCommit } from 'changelogen'
 import { partition } from '@antfu/utils'
-import type { AuthorInfo, ResolvedChangelogOptions } from './types'
+import type { Commit, ResolvedChangelogOptions } from './types'
 
-function formatLine(commit: GitCommit, options: ResolvedChangelogOptions) {
-  const refs = commit.references.map((r) => {
-    if (!options.github)
-      return `\`${r}\``
-    const url = r[0] === '#'
-      ? `https://github.com/${options.github}/issues/${r.slice(1)}`
-      : `https://github.com/${options.github}/commit/${r}`
-    return `[\`${r}\`](${url})`
-  }).join(' ')
+const emojisRE = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
 
-  return options.capitalize
-    ? `${capitalize(commit.description)} ${refs}`
-    : `${commit.description} ${refs}`
+function formatReferences(references: string[], github: string, type: 'pr' | 'hash'): string {
+  const refs = references
+    .filter((ref) => {
+      if (type === 'pr')
+        return ref[0] === '#'
+
+      return ref[0] !== '#'
+    })
+    .map((ref) => {
+      if (!github)
+        return ref
+
+      if (type === 'pr')
+        return `https://github.com/${github}/issues/${ref.slice(1)}`
+
+      return `[<samp>${ref.slice(0, 5)}</samp>](https://github.com/${github}/commit/${ref})`
+    })
+
+  const referencesString = join(refs).trim()
+
+  if (type === 'pr')
+    return referencesString && `in ${referencesString}`
+
+  return referencesString && `(${referencesString})`
 }
 
-function formatTitle(name: string) {
-  return `### &nbsp;&nbsp;&nbsp;${name}`
+function formatLine(commit: Commit, options: ResolvedChangelogOptions) {
+  const prRefs = formatReferences(commit.references, options.github, 'pr')
+  const hashRefs = formatReferences(commit.references, options.github, 'hash')
+
+  let authors = join([...new Set(commit.resolvedAuthors?.map(i => i.login ? `@${i.login}` : `**${i.name}**`))])?.trim()
+  if (authors)
+    authors = `by ${authors}`
+
+  let refs = [authors, prRefs, hashRefs].filter(i => i?.trim()).join(' ')
+
+  if (refs)
+    refs = `&nbsp;-&nbsp; ${refs}`
+
+  const description = options.capitalize ? capitalize(commit.description) : commit.description
+
+  return [description, refs].filter(i => i?.trim()).join(' ')
 }
 
-function formatSection(commits: GitCommit[], sectionName: string, options: ResolvedChangelogOptions) {
+function formatTitle(name: string, options: ResolvedChangelogOptions) {
+  if (!options.emoji)
+    name = name.replace(emojisRE, '')
+
+  return `### &nbsp;&nbsp;&nbsp;${name.trim()}`
+}
+
+function formatSection(commits: Commit[], sectionName: string, options: ResolvedChangelogOptions) {
   if (!commits.length)
     return []
 
   const lines: string[] = [
     '',
-    formatTitle(sectionName),
+    formatTitle(sectionName, options),
     '',
   ]
 
   const scopes = groupBy(commits, 'scope')
+  let useScopeGroup = options.group
+
+  // group scopes only when one of the scope have multiple commits
+  if (!Object.entries(scopes).some(([k, v]) => k && v.length > 1))
+    useScopeGroup = false
+
   Object.keys(scopes).sort().forEach((scope) => {
     let padding = ''
     let prefix = ''
     const scopeText = `**${options.scopeMap[scope] || scope}**`
-    if (scope && options.groupByScope) {
+    if (scope && useScopeGroup) {
       lines.push(`- ${scopeText}:`)
       padding = '  '
     }
@@ -53,7 +92,7 @@ function formatSection(commits: GitCommit[], sectionName: string, options: Resol
   return lines
 }
 
-export function generateMarkdown(commits: GitCommit[], options: ResolvedChangelogOptions, contributors?: AuthorInfo[]) {
+export function generateMarkdown(commits: Commit[], options: ResolvedChangelogOptions) {
   const lines: string[] = []
 
   const [breaking, changes] = partition(commits, c => c.isBreaking)
@@ -74,15 +113,6 @@ export function generateMarkdown(commits: GitCommit[], options: ResolvedChangelo
   if (!lines.length)
     lines.push('*No significant changes*')
 
-  if (contributors?.length) {
-    lines.push(
-      '',
-      formatTitle(options.titles.contributors!),
-      '',
-      `&nbsp;&nbsp;&nbsp;Thanks to ${contributors.map(i => i.login ? `@${i.login}` : i.name).join(' | ')}`,
-    )
-  }
-
   const url = `https://github.com/${options.github}/compare/${options.from}...${options.to}`
 
   lines.push('', `##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](${url})`)
@@ -101,4 +131,17 @@ function groupBy<T>(items: T[], key: string, groups: Record<string, T[]> = {}) {
 
 function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function join(array?: string[], glue = ', ', finalGlue = ' and '): string {
+  if (!array || array.length === 0)
+    return ''
+
+  if (array.length === 1)
+    return array[0]
+
+  if (array.length === 2)
+    return array.join(finalGlue)
+
+  return `${array.slice(0, -1).join(glue)}${finalGlue}${array.slice(-1)}`
 }
