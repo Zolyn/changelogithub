@@ -22,6 +22,7 @@ cli
   .option('--group', 'Nest commit messages under their scopes')
   .option('--dry', 'Dry run')
   .option('-o, --out-path <path>', 'Write the changelog to this file')
+  .option('--outfile', '[Deprecated] Use --out-path or -o instead')
   .option('--out-only', 'Write the changelog only')
   .option('--overwrite', 'Overwrite the changelog file when the changelog file is incompatible')
   .help()
@@ -47,6 +48,12 @@ cli
 
       if (config.dry) {
         console.log(yellow('Dry run. Release skipped.'))
+        return
+      }
+
+      if (config.outfile) {
+        console.error(red(`Option ${bold('--outfile')} is deprecated, use ${green(bold('--out-path'))} or ${green(bold('-o'))} instead.`))
+        process.exitCode = 1
         return
       }
 

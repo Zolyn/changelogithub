@@ -32,6 +32,12 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
    */
   outPath?: string
   /**
+   * @deprecated - use `outPath` instead
+   *
+   * Where to write the changelog.
+   */
+  outfile?: string
+  /**
    * Write the changelog only.
    */
   outOnly?: boolean
