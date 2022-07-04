@@ -4,7 +4,7 @@ import type { Commit, ResolvedChangelogOptions } from './types'
 const emojisRE = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
 
 function formatReferences(references: string[], options: ResolvedChangelogOptions, type: 'pr' | 'hash'): string {
-  const { github, outfile } = options
+  const { github, outPath } = options
 
   const refs = references
     .filter((ref) => {
@@ -18,7 +18,7 @@ function formatReferences(references: string[], options: ResolvedChangelogOption
         return ref
 
       if (type === 'pr') {
-        if (outfile)
+        if (outPath)
           return `[<samp>${ref}</samp>](https://github.com/${github}/issues/${ref.slice(1)})`
 
         return `https://github.com/${github}/issues/${ref.slice(1)}`
