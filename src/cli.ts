@@ -21,8 +21,9 @@ cli
   .option('--emoji', 'Use emojis in section titles', { default: true })
   .option('--group', 'Nest commit messages under their scopes')
   .option('--dry', 'Dry run')
-  .option('-o, --outfile <path>', 'Write the changelog to this file')
+  .option('-o, --out-path <path>', 'Write the changelog to this file')
   .option('--out-only', 'Write the changelog only')
+  .option('--overwrite', 'Overwrite the changelog file when the changelog file is incompatible')
   .help()
 
 cli
@@ -49,8 +50,8 @@ cli
         return
       }
 
-      if (config.outfile)
-        await writeChangelog(config, md)
+      if (config.outPath)
+        await writeChangelog(config, rawMD)
 
       if (config.outOnly) {
         console.log(green('Done.'))

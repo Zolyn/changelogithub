@@ -30,11 +30,15 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
   /**
    * Where to write the changelog.
    */
-  outfile?: string
+  outPath?: string
   /**
    * Write the changelog only.
    */
   outOnly?: boolean
+  /**
+   * Overwrite the changelog file when the changelog file is incompatible.
+   */
+  overwrite?: boolean
   /**
    * Whether to include contributors in release notes.
    *
