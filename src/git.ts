@@ -75,11 +75,8 @@ export async function getUpstreamRepo(): Promise<UpstreamRepoInfo> {
 
 export async function getReferenceRepo(upstreamInfo: UpstreamRepoInfo, to: string, github: string) {
   const { repo, defaultBranch } = upstreamInfo
-  if (repo && defaultBranch && !(await isCommitAheadOfTargetCommit(to, `upstream/${defaultBranch}`))) {
-    console.log(`${to} is Upstream`)
-
+  if (repo && defaultBranch && !(await isCommitAheadOfTargetCommit(to, `upstream/${defaultBranch}`)))
     return repo
-  }
 
   return github
 }
