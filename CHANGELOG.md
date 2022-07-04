@@ -1,5 +1,20 @@
 # Changelog
 
+# [0.10.0](https://github.com/Zolyn/changelogithub/compare/v0.9.0...v0.10.0) (2022-07-05)
+
+### Breaking Changes
+
+- Rename option `outfile` to `outPath` - ([<samp>7a3fd</samp>](https://github.com/Zolyn/changelogithub/commit/7a3fd5e))
+
+### Features
+
+- Add option `overwrite` - ([<samp>70932</samp>](https://github.com/Zolyn/changelogithub/commit/70932b6))
+
+### Bug Fixes
+
+- Remove unnecessary log - ([<samp>d6948</samp>](https://github.com/Zolyn/changelogithub/commit/d6948bc))
+- Add logic for deprecated option - ([<samp>611f3</samp>](https://github.com/Zolyn/changelogithub/commit/611f3e2))
+
 # [0.9.0](https://github.com/Zolyn/changelogithub/compare/v0.8.0...v0.9.0) (2022-07-04)
 
 ### Features
