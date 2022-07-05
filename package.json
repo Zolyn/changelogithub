@@ -1,7 +1,7 @@
 {
   "name": "@zolyn/changelogithub",
   "type": "module",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "packageManager": "pnpm@7.2.0",
   "publishConfig": {
     "access": "public"
