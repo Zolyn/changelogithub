@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.3](https://github.com/Zolyn/changelogithub/compare/v0.10.2...v0.10.3) (2022-07-06)
+
+### Features
+
+- Merge with upstream (v0.12.4) - [<samp>(fa9fd)</samp>](https://github.com/Zolyn/changelogithub/commit/fa9fd10)
+
 ## [0.10.2](https://github.com/Zolyn/changelogithub/compare/v0.10.1...v0.10.2) (2022-07-05)
 
 ### Bug Fixes
