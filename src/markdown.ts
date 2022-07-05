@@ -10,7 +10,6 @@ function formatReferences(references: string[], options: ResolvedChangelogOption
     .filter((ref) => {
       if (type === 'pr')
         return ref[0] === '#'
-
       return ref[0] !== '#'
     })
     .map((ref) => {
@@ -31,8 +30,7 @@ function formatReferences(references: string[], options: ResolvedChangelogOption
 
   if (type === 'pr')
     return referencesString && `in ${referencesString}`
-
-  return referencesString && `(${referencesString})`
+  return referencesString
 }
 
 function formatLine(commit: Commit, options: ResolvedChangelogOptions) {
