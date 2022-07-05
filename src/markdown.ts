@@ -23,7 +23,7 @@ function formatReferences(references: string[], options: ResolvedChangelogOption
         return `https://github.com/${github}/issues/${ref.slice(1)}`
       }
 
-      return `[<samp>${ref.slice(0, 5)}</samp>](https://github.com/${github}/commit/${ref})`
+      return `[<samp>(${ref.slice(0, 5)})</samp>](https://github.com/${github}/commit/${ref})`
     })
 
   const referencesString = join(refs).trim()
