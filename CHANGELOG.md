@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.11.1](https://github.com/Zolyn/changelogithub/compare/v0.11.0...v0.11.1) (2022-07-17)
+
+### Bug Fixes
+
+- Skipping release due to incorrect logic - [<samp>(38987)</samp>](https://github.com/Zolyn/changelogithub/commit/3898732)
+
 # [0.11.0](https://github.com/Zolyn/changelogithub/compare/v0.10.3...v0.11.0) (2022-07-17)
 
 ### Features
