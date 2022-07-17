@@ -58,12 +58,13 @@ cli
         return
       }
 
-      if (config.outPath)
+      if (config.outPath) {
         await writeChangelog(config, rawMD)
 
-      if (config.outOnly) {
-        console.log(green('Done.'))
-        return
+        if (config.outOnly) {
+          console.log(green('Done.'))
+          return
+        }
       }
 
       if (!config.token) {
