@@ -25,6 +25,7 @@ cli
   .option('--outfile', '[Deprecated] Use --out-path or -o instead')
   .option('--out-only', 'Write the changelog only')
   .option('--overwrite', 'Overwrite the changelog file when the changelog file is incompatible')
+  .option('--strict', 'Strict tag matching. Only matches tags created by current repository')
   .help()
 
 cli

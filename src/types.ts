@@ -39,12 +39,22 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
   outfile?: string
   /**
    * Write the changelog only.
+   *
+   * @default true
    */
   outOnly?: boolean
   /**
    * Overwrite the changelog file when the changelog file is incompatible.
+   *
+   * @default false
    */
   overwrite?: boolean
+  /**
+   * Strict tag matching. Only matches tags created by current repository.
+   *
+   * @default false
+   */
+  strict?: boolean
   /**
    * Whether to include contributors in release notes.
    *

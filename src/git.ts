@@ -1,3 +1,4 @@
+import { p } from '@antfu/utils'
 import type { UpstreamRepoInfo } from './types'
 import { execCommand } from './utils'
 
@@ -25,11 +26,6 @@ export async function isRepoShallow() {
   return (await execCommand('git', ['rev-parse', '--is-shallow-repository'])).trim() === 'true'
 }
 
-export async function getLastGitTag(delta = 0) {
-  const tags = await getGitTags()
-  return tags[tags.length + delta - 1]
-}
-
 export async function isCommitAheadOfTargetCommit(commit: string, targetCommit: string) {
   return execCommand('git', ['log', '--oneline', commit, `^${targetCommit}`]).then(r => !!r.split('\n')[0])
 }
@@ -45,11 +41,11 @@ export async function isRefGitTag(to: string) {
 }
 
 export async function getUpstreamDefaultBranch() {
-  return await execCommand('git', ['config', '--get', 'remote.upstream.fetch']).then(r => r.split('/').pop()!)
+  return execCommand('git', ['config', '--get', 'remote.upstream.fetch']).then(r => r.split('/').pop()!)
 }
 
 export async function getFirstGitCommit() {
-  return await execCommand('git', ['rev-list', '--max-parents=0', 'HEAD'])
+  return execCommand('git', ['rev-list', '--max-parents=0', 'HEAD'])
 }
 
 /**
@@ -79,6 +75,32 @@ export async function getReferenceRepo(upstreamInfo: UpstreamRepoInfo, to: strin
     return repo
 
   return github
+}
+
+/**
+ * ? Semi-stable feature: Strict tag matching
+ */
+export async function filterTagsCreatedByRepo(tags: string[], upstreamInfo: UpstreamRepoInfo): Promise<string[]> {
+  const { defaultBranch } = upstreamInfo
+
+  if (defaultBranch) {
+    const result: string[] = []
+    await p(tags).forEach(async (tag, index) => {
+      if (await isCommitAheadOfTargetCommit(tag, `upstream/${defaultBranch}`)) {
+        if (!result.length)
+          result.push(tags[index - 1])
+
+        result.push(tag)
+      }
+    })
+
+    if (!result.length)
+      throw new Error('No commits or tags found. Try making some commits on your own!')
+
+    return result
+  }
+
+  return tags
 }
 
 export function isPrerelease(version: string) {

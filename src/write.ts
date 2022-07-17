@@ -1,10 +1,10 @@
 import { readFile, stat, writeFile } from 'node:fs/promises'
-import semver from 'semver'
 import { bold, red, white, yellow } from 'kolorist'
-import type { ResolvedChangelogOptions, UpstreamRepoInfo } from './types'
+import semver from 'semver'
 import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
-import { getCurrentGitBranch, getFirstGitCommit, getGitCommitTime, getGitTags, getReferenceRepo, getUpstreamRepo } from './git'
 import { generate } from './generate'
+import { filterTagsCreatedByRepo, getCurrentGitBranch, getFirstGitCommit, getGitCommitTime, getGitTags, getReferenceRepo, getUpstreamRepo } from './git'
+import type { ResolvedChangelogOptions, UpstreamRepoInfo } from './types'
 
 export function formatTime(val: number): string {
   return val < 10 ? `0${val}` : val.toString()
@@ -50,23 +50,30 @@ export async function incompatibleChangelogError(options: ResolvedChangelogOptio
 
 export async function writeFullChangelog(options: ResolvedChangelogOptions, upstreamInfo: UpstreamRepoInfo) {
   const lines: string[] = []
-  const tags = await getGitTags()
+  let tags = await getGitTags()
   const currentBranch = await getCurrentGitBranch()
 
   // NEXT_VERSION
   if (tags[tags.length - 1] !== currentBranch)
     tags.push(currentBranch)
 
+  if (options.strict)
+    tags = await filterTagsCreatedByRepo(tags, upstreamInfo)
+
   for (let i = tags.length - 1; i >= 0; i -= 1) {
     let from = tags[i - 1]
     const to = tags[i]
-    const github = await getReferenceRepo(upstreamInfo, to, options.github)
+    const github = options.strict ? options.github : await getReferenceRepo(upstreamInfo, to, options.github)
 
     if (i === tags.length - 1)
       lines.push('# Changelog', '')
 
-    if (i === 0)
+    if (i === 0) {
+      if (options.strict)
+        continue
+
       from = await getFirstGitCommit()
+    }
 
     const { config, md } = await generate({
       ...options,
@@ -83,7 +90,9 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
 
 export async function patchChangelog(options: ResolvedChangelogOptions, upstreamInfo: UpstreamRepoInfo, content: string) {
   const lines: string[] = []
-  options.github = await getReferenceRepo(upstreamInfo, options.to, options.github)
+
+  if (!options.strict)
+    options.github = await getReferenceRepo(upstreamInfo, options.to, options.github)
 
   const { currentVer, result } = await genChangelog(options, content)
 
