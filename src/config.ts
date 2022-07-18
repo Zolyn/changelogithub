@@ -21,6 +21,7 @@ const defaultConfig: ChangelogOptions = {
   outOnly: true,
   overwrite: false,
   strict: false,
+  _isInitial: false,
 }
 
 export async function resolveConfig(options: ChangelogOptions) {
@@ -33,10 +34,16 @@ export async function resolveConfig(options: ChangelogOptions) {
 
   let tags = await getGitTags()
 
-  config.from = config.from || tags[tags.length - 1]
+  config.from = config.from || tags[tags.length - 1];
   config.to = config.to || await getCurrentGitBranch()
   config.github = config.github || await getGitHubRepo()
   config.prerelease = config.prerelease ?? isPrerelease(config.to)
+
+  // xxx(first commit) -> main(current branch)
+  if (!config.from) {
+    config._isInitial = true;
+    config.from = await getFirstGitCommit();
+  }
 
   if (options.strict) {
     if (config.from !== config.to)
@@ -46,8 +53,15 @@ export async function resolveConfig(options: ChangelogOptions) {
     config.from = tags[tags.length - 1]
   }
 
-  if (config.to === config.from)
-    config.from = tags[tags.length - 2] || await getFirstGitCommit()
+  if (config.to === config.from) {
+    config.from = tags[tags.length - 2]
+
+    // xxx(first commit) -> v0.0.1(first tag)
+    if (!config.from) {
+      config._isInitial = true;
+      config.from = await getFirstGitCommit();
+    }
+  }
 
   return config as ResolvedChangelogOptions
 }

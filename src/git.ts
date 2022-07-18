@@ -1,4 +1,5 @@
 import { p } from '@antfu/utils'
+import { RawGitCommit } from 'changelogen'
 import type { UpstreamRepoInfo } from './types'
 import { execCommand } from './utils'
 
@@ -19,7 +20,7 @@ export async function getGitCommitTime(commit: string) {
 }
 
 export async function getGitTags() {
-  return execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n'))
+  return execCommand('git', ['--no-pager', 'tag', '-l', '--sort=taggerdate']).then(r => r.split('\n').filter(Boolean))
 }
 
 export async function isRepoShallow() {
@@ -105,4 +106,23 @@ export async function filterTagsCreatedByRepo(tags: string[], upstreamInfo: Upst
 
 export function isPrerelease(version: string) {
   return version.includes('-')
+}
+
+/**
+ * Source: https://github.com/unjs/changelogen/blob/main/src/git.ts
+ */
+export async function getGitDiff (from: string | undefined, to: string = 'HEAD', initial: boolean): Promise<RawGitCommit[]> {
+  // https://git-scm.com/docs/pretty-formats
+  const r = await execCommand('git', ['--no-pager', 'log', `${from && !initial ? `${from}...` : ''}${to}`, '--pretty="----%n%s|%h|%an|%ae%n%b"', '--name-status'])
+  return r.split('----\n').splice(1).map((line) => {
+    const [firstLine, ..._body] = line.split('\n')
+    const [message, shortHash, authorName, authorEmail] = firstLine.split('|')
+    const r: RawGitCommit = {
+      message,
+      shortHash,
+      author: { name: authorName, email: authorEmail },
+      body: _body.join('\n')
+    }
+    return r
+  })
 }
