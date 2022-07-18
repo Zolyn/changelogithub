@@ -4,7 +4,10 @@ import semver from 'semver'
 import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
 import { generate } from './generate'
 import { filterTagsCreatedByRepo, getCurrentGitBranch, getFirstGitCommit, getGitCommitTime, getGitTags, getReferenceRepo, getUpstreamRepo } from './git'
+import { remark } from 'remark'
+import { Link, Text } from 'mdast'
 import type { ResolvedChangelogOptions, UpstreamRepoInfo } from './types'
+import { notNullish, isNumber } from '@antfu/utils'
 
 export function formatTime(val: number): string {
   return val < 10 ? `0${val}` : val.toString()
@@ -14,10 +17,20 @@ export async function genChangelog(config: ResolvedChangelogOptions, md: string)
   const currentVer = semver.valid(config.from) || INITIAL_VERSION_MARK
   const releaseVer = semver.valid(config.to) || NEXT_VERSION_MARK
   let heading = '##'
+  let version = releaseVer;
+
+  // v0.0.1(tag) -> v0.1.0(tag)
+  // xxx(first commit) -> v0.1.0(first tag)
   if (releaseVer !== NEXT_VERSION_MARK && !['patch', 'prepatch', 'prerelease'].includes(semver.diff(currentVer === INITIAL_VERSION_MARK ? 'v0.0.0' : currentVer, releaseVer)!))
     heading = '#'
 
-  const compareLink = `[${releaseVer}](https://github.com/${config.github}/compare/${config.from}...${config.to})`
+  // xxx(first commit) -> main(current branch)
+  if (releaseVer === NEXT_VERSION_MARK && currentVer === INITIAL_VERSION_MARK) {
+    version = INITIAL_VERSION_MARK;
+  }
+
+  // NOTE: The comparison for initial version is incomplete because it doesn't include the first commit.
+  const compareLink = `[${version}](https://github.com/${config.github}/compare/${config.from}...${config.to})`
 
   const time = new Date(parseInt(await getGitCommitTime(config.to), 10) * 1000)
   const year = time.getFullYear()
@@ -65,6 +78,8 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
     const to = tags[i]
     const github = options.strict ? options.github : await getReferenceRepo(upstreamInfo, to, options.github)
 
+    let initial = false;
+
     if (i === tags.length - 1)
       lines.push('# Changelog', '')
 
@@ -72,6 +87,7 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
       if (options.strict)
         continue
 
+      initial = true;
       from = await getFirstGitCommit()
     }
 
@@ -80,6 +96,7 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
       from,
       to,
       github,
+      _isInitial: initial
     })
 
     lines.push(...(await genChangelog(config, md.replaceAll('&nbsp;', ''))).result)
@@ -89,44 +106,62 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
 }
 
 export async function patchChangelog(options: ResolvedChangelogOptions, upstreamInfo: UpstreamRepoInfo, content: string) {
-  const lines: string[] = []
-
   if (!options.strict)
     options.github = await getReferenceRepo(upstreamInfo, options.to, options.github)
 
-  const { currentVer, result } = await genChangelog(options, content)
-
-  if (currentVer === INITIAL_VERSION_MARK)
-    return incompatibleChangelogError(options, upstreamInfo)
-
-  lines.push(...result)
-
   const resolvedChangelog = await readFile(options.outPath, 'utf-8')
-  let nextVersionClip = resolvedChangelog.split(`[${NEXT_VERSION_MARK}]`)
 
-  const changelogClip: string[] = resolvedChangelog.split(`[${currentVer}]`)
+  const { result, releaseVer } = await genChangelog(options, content)
 
-  if (!(changelogClip.length > 1))
+  const Remark = remark();
+  const ast = Remark.parse(resolvedChangelog);
+  const resultAst = Remark.parse(result.join('\n'));
+  const versionRE = /^[0-9]+.[0-9]+.[0-9]+(-[a-z]+.[0-9]+)?$|NEXT(\\)?_VERSION|INITIAL(\\)?_VERSION/i
+
+  const versionList = ast.children.map((node, idx) => {
+      if (node.type === 'heading' && node.depth <= 2) {
+          const link = node.children.find((n): n is Link => n.type === 'link');
+
+          if (link) {
+              const text = link.children.find((e): e is Text => e.type === 'text')
+              
+              if (text && versionRE.test(text.value)) {
+                return {
+                  index: idx,
+                  value: text.value,
+                }
+              }
+          }
+
+          return null;
+      }
+
+      return null;
+  }).filter(notNullish);
+
+  if (versionList.length) {
+    const firstIndex = versionList[0].index;
+    const lastIndex = versionList[1]?.index;
+    let restIndex: number = lastIndex;
+
+    const isPendingVersion = [NEXT_VERSION_MARK, INITIAL_VERSION_MARK].includes(versionList[0].value);
+
+    if (!isPendingVersion && (releaseVer === NEXT_VERSION_MARK || releaseVer !== versionList[0].value)) {
+      restIndex = firstIndex;
+    }
+
+    const restOfChildren = ast.children.slice(restIndex);
+    ast.children = ast.children.slice(0, firstIndex);
+    ast.children.push(...resultAst.children);
+
+    if (isNumber(restIndex)) {
+      ast.children.push(...restOfChildren);
+    }
+  } else {
     return incompatibleChangelogError(options, upstreamInfo)
-
-  let changelogHeadClip = changelogClip[0].split('\n')
-
-  let currentVerHeading = changelogHeadClip[changelogHeadClip.length - 1]
-
-  nextVersionClip = changelogClip[0].split(`[${NEXT_VERSION_MARK}]`)
-
-  // Drop the changelog of NEXT_VERSION if exists
-  if (nextVersionClip.length > 1) {
-    changelogHeadClip = nextVersionClip[0].split('\n')
-    const nextVersionChangelogClip = nextVersionClip[1].split('\n')
-    currentVerHeading = nextVersionChangelogClip[nextVersionChangelogClip.length - 1]
   }
 
-  changelogHeadClip[changelogHeadClip.length - 1] = lines.join('\n')
-  changelogHeadClip.push(currentVerHeading)
-  changelogClip[0] = changelogHeadClip.join('\n')
-
-  return writeFile(options.outPath, changelogClip.join(`[${currentVer}]`))
+  return writeFile(options.outPath, Remark.stringify(ast));
 }
 
 export async function writeChangelog(options: ResolvedChangelogOptions, content: string) {
