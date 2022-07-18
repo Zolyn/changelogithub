@@ -1,13 +1,13 @@
 import { readFile, stat, writeFile } from 'node:fs/promises'
 import { bold, red, white, yellow } from 'kolorist'
 import semver from 'semver'
+import { remark } from 'remark'
+import type { Link, Text } from 'mdast'
+import { isNumber, notNullish } from '@antfu/utils'
 import { INITIAL_VERSION_MARK, NEXT_VERSION_MARK } from './constants'
 import { generate } from './generate'
 import { filterTagsCreatedByRepo, getCurrentGitBranch, getFirstGitCommit, getGitCommitTime, getGitTags, getReferenceRepo, getUpstreamRepo } from './git'
-import { remark } from 'remark'
-import { Link, Text } from 'mdast'
 import type { ResolvedChangelogOptions, UpstreamRepoInfo } from './types'
-import { notNullish, isNumber } from '@antfu/utils'
 
 export function formatTime(val: number): string {
   return val < 10 ? `0${val}` : val.toString()
@@ -17,7 +17,7 @@ export async function genChangelog(config: ResolvedChangelogOptions, md: string)
   const currentVer = semver.valid(config.from) || INITIAL_VERSION_MARK
   const releaseVer = semver.valid(config.to) || NEXT_VERSION_MARK
   let heading = '##'
-  let version = releaseVer;
+  let version = releaseVer
 
   // v0.0.1(tag) -> v0.1.0(tag)
   // xxx(first commit) -> v0.1.0(first tag)
@@ -25,9 +25,8 @@ export async function genChangelog(config: ResolvedChangelogOptions, md: string)
     heading = '#'
 
   // xxx(first commit) -> main(current branch)
-  if (releaseVer === NEXT_VERSION_MARK && currentVer === INITIAL_VERSION_MARK) {
-    version = INITIAL_VERSION_MARK;
-  }
+  if (releaseVer === NEXT_VERSION_MARK && currentVer === INITIAL_VERSION_MARK)
+    version = INITIAL_VERSION_MARK
 
   // NOTE: The comparison for initial version is incomplete because it doesn't include the first commit.
   const compareLink = `[${version}](https://github.com/${config.github}/compare/${config.from}...${config.to})`
@@ -78,7 +77,7 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
     const to = tags[i]
     const github = options.strict ? options.github : await getReferenceRepo(upstreamInfo, to, options.github)
 
-    let initial = false;
+    let initial = false
 
     if (i === tags.length - 1)
       lines.push('# Changelog', '')
@@ -87,7 +86,7 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
       if (options.strict)
         continue
 
-      initial = true;
+      initial = true
       from = await getFirstGitCommit()
     }
 
@@ -96,7 +95,7 @@ export async function writeFullChangelog(options: ResolvedChangelogOptions, upst
       from,
       to,
       github,
-      _isInitial: initial
+      _isInitial: initial,
     })
 
     lines.push(...(await genChangelog(config, md.replaceAll('&nbsp;', ''))).result)
@@ -113,55 +112,54 @@ export async function patchChangelog(options: ResolvedChangelogOptions, upstream
 
   const { result, releaseVer } = await genChangelog(options, content)
 
-  const Remark = remark();
-  const ast = Remark.parse(resolvedChangelog);
-  const resultAst = Remark.parse(result.join('\n'));
+  const Remark = remark()
+  const ast = Remark.parse(resolvedChangelog)
+  const resultAst = Remark.parse(result.join('\n'))
   const versionRE = /^[0-9]+.[0-9]+.[0-9]+(-[a-z]+.[0-9]+)?$|NEXT(\\)?_VERSION|INITIAL(\\)?_VERSION/i
 
   const versionList = ast.children.map((node, idx) => {
-      if (node.type === 'heading' && node.depth <= 2) {
-          const link = node.children.find((n): n is Link => n.type === 'link');
+    if (node.type === 'heading' && node.depth <= 2) {
+      const link = node.children.find((n): n is Link => n.type === 'link')
 
-          if (link) {
-              const text = link.children.find((e): e is Text => e.type === 'text')
-              
-              if (text && versionRE.test(text.value)) {
-                return {
-                  index: idx,
-                  value: text.value,
-                }
-              }
+      if (link) {
+        const text = link.children.find((e): e is Text => e.type === 'text')
+
+        if (text && versionRE.test(text.value)) {
+          return {
+            index: idx,
+            value: text.value,
           }
-
-          return null;
+        }
       }
 
-      return null;
-  }).filter(notNullish);
+      return null
+    }
+
+    return null
+  }).filter(notNullish)
 
   if (versionList.length) {
-    const firstIndex = versionList[0].index;
-    const lastIndex = versionList[1]?.index;
-    let restIndex: number = lastIndex;
+    const firstIndex = versionList[0].index
+    const lastIndex = versionList[1]?.index
+    let restIndex: number = lastIndex
 
-    const isPendingVersion = [NEXT_VERSION_MARK, INITIAL_VERSION_MARK].includes(versionList[0].value);
+    const isPendingVersion = [NEXT_VERSION_MARK, INITIAL_VERSION_MARK].includes(versionList[0].value)
 
-    if (!isPendingVersion && (releaseVer === NEXT_VERSION_MARK || releaseVer !== versionList[0].value)) {
-      restIndex = firstIndex;
-    }
+    if (!isPendingVersion && (releaseVer === NEXT_VERSION_MARK || releaseVer !== versionList[0].value))
+      restIndex = firstIndex
 
-    const restOfChildren = ast.children.slice(restIndex);
-    ast.children = ast.children.slice(0, firstIndex);
-    ast.children.push(...resultAst.children);
+    const restOfChildren = ast.children.slice(restIndex)
+    ast.children = ast.children.slice(0, firstIndex)
+    ast.children.push(...resultAst.children)
 
-    if (isNumber(restIndex)) {
-      ast.children.push(...restOfChildren);
-    }
-  } else {
+    if (isNumber(restIndex))
+      ast.children.push(...restOfChildren)
+  }
+  else {
     return incompatibleChangelogError(options, upstreamInfo)
   }
 
-  return writeFile(options.outPath, Remark.stringify(ast));
+  return writeFile(options.outPath, Remark.stringify(ast))
 }
 
 export async function writeChangelog(options: ResolvedChangelogOptions, content: string) {

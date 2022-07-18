@@ -100,10 +100,10 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
   emoji?: boolean
   /**
    * Whether it is initial version
-   * 
+   *
    * @internal
    */
-  _isInitial: boolean;
+  _isInitial: boolean
 }
 
 export type ResolvedChangelogOptions = Required<ChangelogOptions>

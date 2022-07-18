@@ -34,15 +34,15 @@ export async function resolveConfig(options: ChangelogOptions) {
 
   let tags = await getGitTags()
 
-  config.from = config.from || tags[tags.length - 1];
+  config.from = config.from || tags[tags.length - 1]
   config.to = config.to || await getCurrentGitBranch()
   config.github = config.github || await getGitHubRepo()
   config.prerelease = config.prerelease ?? isPrerelease(config.to)
 
   // xxx(first commit) -> main(current branch)
   if (!config.from) {
-    config._isInitial = true;
-    config.from = await getFirstGitCommit();
+    config._isInitial = true
+    config.from = await getFirstGitCommit()
   }
 
   if (options.strict) {
@@ -58,8 +58,8 @@ export async function resolveConfig(options: ChangelogOptions) {
 
     // xxx(first commit) -> v0.0.1(first tag)
     if (!config.from) {
-      config._isInitial = true;
-      config.from = await getFirstGitCommit();
+      config._isInitial = true
+      config.from = await getFirstGitCommit()
     }
   }
 

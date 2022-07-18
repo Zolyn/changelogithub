@@ -1,5 +1,5 @@
 import { p } from '@antfu/utils'
-import { RawGitCommit } from 'changelogen'
+import type { RawGitCommit } from 'changelogen'
 import type { UpstreamRepoInfo } from './types'
 import { execCommand } from './utils'
 
@@ -111,7 +111,7 @@ export function isPrerelease(version: string) {
 /**
  * Source: https://github.com/unjs/changelogen/blob/main/src/git.ts
  */
-export async function getGitDiff (from: string | undefined, to: string = 'HEAD', initial: boolean): Promise<RawGitCommit[]> {
+export async function getGitDiff(from: string | undefined, to = 'HEAD', initial: boolean): Promise<RawGitCommit[]> {
   // https://git-scm.com/docs/pretty-formats
   const r = await execCommand('git', ['--no-pager', 'log', `${from && !initial ? `${from}...` : ''}${to}`, '--pretty="----%n%s|%h|%an|%ae%n%b"', '--name-status'])
   return r.split('----\n').splice(1).map((line) => {
@@ -121,7 +121,7 @@ export async function getGitDiff (from: string | undefined, to: string = 'HEAD',
       message,
       shortHash,
       author: { name: authorName, email: authorEmail },
-      body: _body.join('\n')
+      body: _body.join('\n'),
     }
     return r
   })
