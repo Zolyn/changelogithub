@@ -104,6 +104,12 @@ export interface ChangelogOptions extends Partial<ChangelogenOptions> {
    * @internal
    */
   _isInitial: boolean
+  /**
+   * Whether it is writing changelog file
+   *
+   * @internal
+   */
+  _changelog: boolean
 }
 
 export type ResolvedChangelogOptions = Required<ChangelogOptions>
@@ -119,3 +125,5 @@ export interface UpstreamRepoInfo {
   repo?: string
   defaultBranch?: string
 }
+
+export type ResolvedUpstreamInfo = Required<UpstreamRepoInfo>

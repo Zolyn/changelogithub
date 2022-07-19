@@ -1,3 +1,4 @@
+import semver from 'semver'
 import { filterTagsCreatedByRepo, getCurrentGitBranch, getFirstGitCommit, getGitHubRepo, getGitTags, getUpstreamRepo, isPrerelease } from './git'
 import type { ChangelogOptions, ResolvedChangelogOptions } from './types'
 
@@ -22,6 +23,7 @@ const defaultConfig: ChangelogOptions = {
   overwrite: false,
   strict: false,
   _isInitial: false,
+  _changelog: false,
 }
 
 export async function resolveConfig(options: ChangelogOptions) {
@@ -39,18 +41,23 @@ export async function resolveConfig(options: ChangelogOptions) {
   config.github = config.github || await getGitHubRepo()
   config.prerelease = config.prerelease ?? isPrerelease(config.to)
 
-  // xxx(first commit) -> main(current branch)
-  if (!config.from) {
-    config._isInitial = true
-    config.from = await getFirstGitCommit()
-  }
-
   if (options.strict) {
-    if (config.from !== config.to)
+    if (!semver.valid(config.to))
       tags.push(config.to)
 
-    tags = await filterTagsCreatedByRepo(tags, await getUpstreamRepo())
+    const upstreamInfo = await getUpstreamRepo(true)
+
+    tags = await filterTagsCreatedByRepo(tags, upstreamInfo)
+
+    if (tags.length === 2 && !(tags[0].startsWith('v') || tags[0].endsWith('^')))
+      config._isInitial = true
+
     config.from = tags[tags.length - 1]
+  }
+  // xxx(first commit) -> main(current branch)
+  else if (!config.from) {
+    config._isInitial = true
+    config.from = await getFirstGitCommit()
   }
 
   if (config.to === config.from) {
