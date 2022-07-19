@@ -3,7 +3,7 @@ import { blue, bold, cyan, dim, green, red, yellow } from 'kolorist'
 import cac from 'cac'
 import { version } from '../package.json'
 import { writeChangelog } from './write'
-import { generate, hasTagOnGitHub, isRepoShallow, sendRelease } from './index'
+import { generate, getCommitsAmount, hasTagOnGitHub, isRepoShallow, sendRelease } from './index'
 
 const cli = cac('changelogithub')
 
@@ -25,7 +25,7 @@ cli
   .option('--outfile', '[Deprecated] Use --out-path or -o instead')
   .option('--out-only', 'Write the changelog only')
   .option('--overwrite', 'Overwrite the changelog file when the changelog file is incompatible')
-  .option('--strict', 'Strict tag matching. Only matches tags created by current repository')
+  .option('--strict', 'Strict tag matching. Only matches tags created by current repository. Don\'t enable this if you don\'t have an upstream repo')
   .help()
 
 cli
@@ -37,10 +37,18 @@ cli
       console.log()
       console.log(dim(`changelo${bold('github')} `) + dim(`v${version}`))
 
+      const commitsAmount = await getCommitsAmount()
+
+      if (!commitsAmount) {
+        console.error(red('No commits found.'))
+        process.exitCode = 1
+        return
+      }
+
       const { config, md, commits } = await generate(args as any)
 
       const rawMD = md.replace(/\&nbsp;/g, '')
-      console.log(cyan(config.from) + dim(' -> ') + blue(config.to) + dim(` (${commits.length} commits)`))
+      console.log(cyan(config.from[0] === 'v' ? config.from : config.from.slice(0, 7)) + dim(' -> ') + blue(config.to) + dim(` (${commits.length} commits)`))
       console.log(dim('--------------'))
       console.log()
       console.log(rawMD)
