@@ -17,10 +17,12 @@ specifiers:
   execa: ^6.1.0
   kolorist: ^1.5.1
   ohmyfetch: ^0.4.18
-  remark: ^14.0.2
+  remark-parse: ^10.0.1
+  remark-stringify: ^10.0.2
   semver: ^7.3.7
   typescript: ^4.7.4
   unbuild: ^0.7.4
+  unified: ^10.1.2
 
 dependencies:
   '@antfu/utils': 0.5.2
@@ -30,8 +32,10 @@ dependencies:
   execa: 6.1.0
   kolorist: 1.5.1
   ohmyfetch: 0.4.18
-  remark: 14.0.2
+  remark-parse: 10.0.1
+  remark-stringify: 10.0.2
   semver: 7.3.7
+  unified: 10.1.2
 
 devDependencies:
   '@antfu/eslint-config': 0.25.2_b5e7v2qnwxfo6hmiq56u52mz3e
@@ -3413,17 +3417,6 @@ packages:
       '@types/mdast': 3.0.10
       mdast-util-to-markdown: 1.3.0
       unified: 10.1.2
-    dev: false
-
-  /remark/14.0.2:
-    resolution: {integrity: sha512-A3ARm2V4BgiRXaUo5K0dRvJ1lbogrbXnhkJRmD0yw092/Yl0kOCZt1k9ZeElEwkZsWGsMumz6qL5MfNJH9nOBA==}
-    dependencies:
-      '@types/mdast': 3.0.10
-      remark-parse: 10.0.1
-      remark-stringify: 10.0.2
-      unified: 10.1.2
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /resolve-from/4.0.0:
